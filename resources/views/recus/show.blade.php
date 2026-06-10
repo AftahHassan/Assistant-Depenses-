@@ -66,7 +66,7 @@
 
         <div class="mt-4">
             <a href="{{ route('recus.index') }}" class="text-blue-600 hover:underline">
-                ← Retour à la liste
+                 Retour à la liste
             </a>
         </div>
     </div>
