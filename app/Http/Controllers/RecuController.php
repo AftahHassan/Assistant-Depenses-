@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Enums\StatutEnum;
 use App\Http\Requests\StoreRecuRequest;
-use App\Jobs\ExtraireDepensesDuRecu;
 use App\Models\Recu;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class RecuController extends Controller
 {
+    use AuthorizesRequests;
     public function index()
     {
         $recus = Recu::with('depenses')

@@ -15,14 +15,17 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
+        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-8 sm:pt-0 bg-gray-100">
+            <div class="mb-6 text-center">
                 <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+                    <x-application-logo class="w-16 h-16 mx-auto fill-current text-indigo-600" />
                 </a>
+                <h1 class="mt-3 text-2xl font-bold tracking-tight text-gray-900">
+                    {{ config('app.name', 'Assistant Dépenses') }}
+                </h1>
             </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+            <div class="w-full sm:max-w-md bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
                 {{ $slot }}
             </div>
         </div>
