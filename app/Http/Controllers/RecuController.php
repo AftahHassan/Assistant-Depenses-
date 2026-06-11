@@ -6,6 +6,7 @@ use App\Enums\StatutEnum;
 use App\Http\Requests\StoreRecuRequest;
 use App\Models\Recu;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Jobs\ExtraireDepensesDuRecu;
 
 class RecuController extends Controller
 {

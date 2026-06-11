@@ -28,7 +28,7 @@ class ExtraireDepensesDuRecu implements ShouldQueue
                 instructions: 'Extrais les dépenses à partir du texte du reçu fournisseur.',
                 messages: [new UserMessage($this->recu->texte_brut)],
                 schema: fn (JsonSchema $schema) => ReponseIA::schema($schema),
-            )->prompt('', model: 'llama-3.1-8b-instant');
+            )->prompt('', model: 'meta-llama/llama-4-scout-17b-16e-instruct');
 
             $data = $response->toArray();
 
