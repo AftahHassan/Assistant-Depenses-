@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\StatutEnum;
 use App\Http\Requests\StoreRecuRequest;
+use App\Jobs\ExtraireDepensesDuRecu;
 use App\Models\Recu;
 
 class RecuController extends Controller
@@ -31,7 +32,7 @@ class RecuController extends Controller
             'statut'     => StatutEnum::EnAttente,
         ]);
 
-        // Jour 3 : ExtraireDepensesDuRecu::dispatch($recu);
+        ExtraireDepensesDuRecu::dispatch($recu);
 
         return redirect()->route('recus.index')
             ->with('success', 'Reçu en cours de traitement.');
