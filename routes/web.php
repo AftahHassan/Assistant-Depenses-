@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DepenseController;
 use App\Http\Controllers\RecuController;
 
 Route::get('/', function () {
@@ -19,6 +20,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('recus', RecuController::class)
         ->only(['index', 'create', 'store', 'show', 'destroy']);
+
+    Route::get('/depenses', [DepenseController::class, 'index'])->name('depenses.index');
 });
 
 require __DIR__.'/auth.php';
