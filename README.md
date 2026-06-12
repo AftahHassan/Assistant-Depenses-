@@ -451,7 +451,7 @@ Implementation
 ---
 
 # 👨‍💻 Auteur
-
+  # AFTAH Hassan
 Projet réalisé dans le cadre d'une formation Laravel & AI Engineering.
 
 Développé avec Laravel, OpenSpec et Groq AI.
