@@ -7,7 +7,7 @@ use App\Http\Controllers\DepenseController;
 use App\Http\Controllers\RecuController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth/login');
 });
 
 

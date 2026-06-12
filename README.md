@@ -1,58 +1,457 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🧾 Assistant Dépenses — Extraction Intelligente de Reçus avec Laravel & IA
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 📌 Description
 
-## About Laravel
+Assistant Dépenses est une application web développée avec Laravel permettant d'extraire automatiquement les dépenses contenues dans des reçus fournisseurs grâce à l'intelligence artificielle.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+L'utilisateur colle simplement le texte d'un reçu et l'application analyse son contenu afin d'en extraire des dépenses structurées, catégorisées et enregistrées dans une base de données.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Le projet utilise :
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Laravel 13
+- Laravel AI SDK
+- Groq API
+- Queue & Jobs
+- Eloquent ORM
+- Form Requests
+- Enum Casts
+- OpenSpec
+- MySQL
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+# 🎯 Objectif du projet
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Automatiser la saisie des dépenses à partir de reçus papier afin de permettre aux commerçants de :
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+- suivre leurs dépenses
+- visualiser leurs achats
+- classer automatiquement les produits
+- éviter la saisie manuelle
 
-## Agentic Development
+---
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+# 🚀 Fonctionnalités
 
-```bash
-composer require laravel/boost --dev
+## 🔐 Authentification
 
-php artisan boost:install
+- Inscription
+- Connexion
+- Déconnexion
+
+---
+
+## 🧾 Gestion des reçus
+
+### Ajouter un reçu
+
+L'utilisateur colle le texte brut d'un reçu fournisseur.
+
+Exemple :
+
+```text
+2 Coca Cola 12.50
+1 Huile Lesieur 45.00
+3 Savon Dove 8.00
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Le reçu est enregistré avec le statut :
 
-## Contributing
+```text
+EN_ATTENTE
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+### Liste des reçus
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Affichage de :
 
-## Security Vulnerabilities
+- Date de création
+- Statut
+- Nombre de dépenses extraites
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Statuts disponibles :
 
-## License
+- En attente
+- Traité
+- Échoué
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+### Détail d'un reçu
+
+Affichage de :
+
+- Texte source
+- Statut
+- Dépenses extraites
+- Total estimé
+- Devise
+
+---
+
+### Suppression d'un reçu
+
+Suppression du reçu et de toutes ses dépenses associées.
+
+---
+
+## 🤖 Extraction IA
+
+Après la création du reçu :
+
+1. Un Job est dispatché dans la Queue.
+2. Laravel AI envoie le texte à Groq.
+3. L'IA retourne un JSON structuré.
+4. Les données sont validées.
+5. Les dépenses sont enregistrées en base.
+
+---
+
+### Contrat JSON attendu
+
+```json
+{
+  "articles": [
+    {
+      "libelle": "Coca Cola",
+      "quantite": 2,
+      "prix_unitaire": 12.5,
+      "categorie": "boissons"
+    }
+  ],
+  "total_estime": 25,
+  "devise": "MAD"
+}
+```
+
+---
+
+## 📊 Gestion des dépenses
+
+Liste complète des dépenses avec :
+
+- Libellé
+- Quantité
+- Prix unitaire
+- Catégorie
+- Reçu associé
+
+Filtrage par catégorie :
+
+- Alimentaire
+- Boissons
+- Hygiène
+- Entretien
+- Autre
+
+---
+
+# 🏗️ Architecture du projet
+
+## Relations Eloquent
+
+```php
+Recu hasMany Depense
+Depense belongsTo Recu
+```
+
+---
+
+## Form Request
+
+Validation des données via :
+
+```bash
+StoreRecuRequest
+```
+
+Contrôles :
+
+- requis
+- taille minimale
+- taille maximale
+
+---
+
+## Queue & Jobs
+
+Traitement IA asynchrone :
+
+```bash
+php artisan make:job ExtraireDepensesDuRecu
+```
+
+L'utilisateur ne reste jamais bloqué pendant le traitement.
+
+Lancement du worker :
+
+```bash
+php artisan queue:work
+```
+
+---
+
+## Enum Casts
+
+### Statut du reçu
+
+```php
+enum RecuStatus
+{
+    case EN_ATTENTE;
+    case TRAITE;
+    case ECHOUE;
+}
+```
+
+### Catégorie de dépense
+
+```php
+enum DepenseCategorie
+{
+    case ALIMENTAIRE;
+    case BOISSONS;
+    case HYGIENE;
+    case ENTRETIEN;
+    case AUTRE;
+}
+```
+
+---
+
+## Payload IA
+
+Conservation du résultat brut :
+
+```php
+protected $casts = [
+    'payload_brut' => 'array'
+];
+```
+
+---
+
+# 🗄️ Base de données
+
+## Table users
+
+| Champ | Type |
+|---------|---------|
+| id | bigint |
+| name | string |
+| email | string |
+| password | string |
+
+---
+
+## Table recus
+
+| Champ | Type |
+|---------|---------|
+| id | bigint |
+| user_id | foreignId |
+| texte_source | longText |
+| statut | enum |
+| payload_brut | json |
+| created_at | timestamp |
+
+---
+
+## Table depenses
+
+| Champ | Type |
+|---------|---------|
+| id | bigint |
+| recu_id | foreignId |
+| libelle | string |
+| quantite | integer |
+| prix_unitaire | decimal |
+| categorie | enum |
+
+---
+
+# 📂 Structure du projet
+
+```text
+app/
+├── Enums/
+├── Http/
+│   ├── Controllers/
+│   └── Requests/
+├── Jobs/
+├── Models/
+├── Services/
+
+database/
+├── migrations/
+
+resources/
+├── views/
+
+specs/
+
+AGENTS.md
+README.md
+```
+
+---
+
+# ⚙️ Installation
+
+## 1. Cloner le projet
+
+```bash
+git clone https://github.com/AftahHassan/Assistant-Depenses-.git
+```
+
+```bash
+cd assistant-depenses
+```
+
+---
+
+## 2. Installer les dépendances
+
+```bash
+composer install
+```
+
+```bash
+npm install
+```
+
+---
+
+## 3. Configuration
+
+Créer le fichier :
+
+```bash
+.env
+```
+
+Puis :
+
+```bash
+cp .env.example .env
+```
+
+Générer la clé :
+
+```bash
+php artisan key:generate
+```
+
+---
+
+## 4. Configuration de la base de données
+
+```env
+DB_CONNECTION=mysql
+DB_DATABASE=assistant_depenses
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+---
+
+## 5. Configuration de Groq
+
+```env
+GROQ_API_KEY=xxxxxxxxxxxxxxxx
+```
+
+---
+
+## 6. Migrations
+
+```bash
+php artisan migrate
+```
+
+---
+
+## 7. Lancer les serveurs
+
+Application :
+
+```bash
+php artisan serve
+```
+
+Worker :
+
+```bash
+php artisan queue:work
+```
+
+Frontend :
+
+```bash
+npm run dev
+```
+
+---
+
+# 📖 Workflow AI-Assisted
+
+Le projet suit la méthodologie OpenSpec.
+
+## Dossier specs
+
+```text
+specs/
+├── auth
+├── recus-crud
+├── extraction-ia
+├── queue-traitement
+```
+
+Chaque fonctionnalité suit :
+
+```text
+Proposal
+↓
+Specification
+↓
+Tasks
+↓
+Implementation
+```
+
+---
+
+# 🤝 Technologies utilisées
+
+- Laravel
+- PHP 8.3+
+- MySQL
+- Laravel AI SDK
+- Groq API
+- Queue Workers
+- OpenSpec
+- Laravel Debugbar
+- Tailwind CSS
+
+---
+
+# 📈 Améliorations futures
+
+- Upload d'image de reçu
+- OCR automatique
+- Dashboard analytique
+- Graphiques des dépenses
+- Export PDF
+- Export Excel
+- Notifications en temps réel
+- Tests Pest
+
+---
+
+# 👨‍💻 Auteur
+
+Projet réalisé dans le cadre d'une formation Laravel & AI Engineering.
+
+Développé avec Laravel, OpenSpec et Groq AI.
